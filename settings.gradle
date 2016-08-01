@@ -1,1 +1,1 @@
-include ':app', ':easyframeforandroid'
+include ':app', ':easyframeforandroid', ':photoselector'

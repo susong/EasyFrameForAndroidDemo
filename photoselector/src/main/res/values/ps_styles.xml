@@ -1,0 +1,10 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="PsCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/ps_selector_btn_checkbox</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+    <style name="PsPopupWindowAnimal">
+        <item name="android:windowEnterAnimation">@anim/ps_anim_photo_pop_enter</item>
+        <item name="android:windowExitAnimation">@anim/ps_anim_photo_pop_exit</item>
+    </style>
+</resources>
