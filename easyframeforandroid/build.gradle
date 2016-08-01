@@ -33,10 +33,12 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            //默认配置
+            shrinkResources true
+            // 默认配置
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //
+            // 自定义配置
             //consumerProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 自定义配置
             FileCollection proGuardFileCollection = files { file('./proguard').listFiles() }
             consumerProguardFiles(proGuardFileCollection)
         }
@@ -52,18 +54,53 @@ android {
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+
+    // http://stackoverflow.com/questions/32153318/httpclient-wont-import-in-android-studio#
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:support-annotations:23.4.0'
+
     // https://developer.android.com/studio/build/multidex.html
     compile 'com.android.support:multidex:1.0.1'
+
     // https://github.com/orfjackal/retrolambda
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.1.0'
+
     // https://github.com/orhanobut/logger
     compile 'com.orhanobut:logger:1.15'
+
     // https://github.com/elvishew/xLog
     compile 'com.elvishew:xlog:0.1.1'
+
+    // https://github.com/google/gson
+    compile 'com.google.code.gson:gson:2.7'
+
+    // https://github.com/greenrobot/EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    // https://github.com/JakeWharton/butterknife
+    compile 'com.jakewharton:butterknife:8.1.0'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
+
+    // https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+
+    // https://github.com/loopj/android-async-http
+    compile 'com.loopj.android:android-async-http:1.4.9'
+
+    // https://github.com/chrisbanes/PhotoView
+    compile 'com.github.chrisbanes:PhotoView:1.2.7'
+
+    // https://github.com/JakeWharton/NineOldAndroids
+    compile 'com.nineoldandroids:library:2.4.0'
+
 }

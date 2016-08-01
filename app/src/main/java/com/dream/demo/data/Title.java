@@ -25,7 +25,8 @@ public class Title {
     public static TitleEntity title_b_1_3 = new TitleEntity("stormzhang", R.layout.view_listview, MainActivity.class);
 
     public static TitleEntity title_c_1_1_1 = new TitleEntity("UDP广播发送和接收", R.layout.activity_net, NetActivity.class);
-    public static TitleEntity title_c_1_1_2 = new TitleEntity("Android UDP广播发送和接收服务", R.layout.activity_main, com.dream.demo.tcpservice.MainActivity.class);
+    public static TitleEntity title_c_1_1_2 = new TitleEntity("Android UDP广播发送和接收服务", R.layout.activity_udp, com.dream.demo.tcpservice.MainActivity.class);
+    public static TitleEntity title_c_1_1_3 = new TitleEntity("SwitchButton", R.layout.activity_udp, com.kyleduo.switchbutton.demo.MainActivity.class);
 
     public static TitleEntity title_c_1_2_1 = new TitleEntity("Android绘图技术详解，带你轻松绘出各种图形", R.layout.view_listview, MainActivity.class);
     public static TitleEntity title_c_1_2_2 = new TitleEntity("Android绘图进阶之Path详解", R.layout.view_listview, MainActivity.class);

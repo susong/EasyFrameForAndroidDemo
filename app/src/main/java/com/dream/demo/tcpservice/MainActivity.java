@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_udp);
         startButton = (Button) findViewById(R.id.start_button);
         sendButton1 = (Button) findViewById(R.id.send_button1);
         receiveEditText = (EditText) findViewById(R.id.receive_EditText);

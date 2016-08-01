@@ -74,6 +74,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
 
     compile project(':easyframeforandroid')
+    compile project(':photoselector')
+    compile project(':headimageselector')
+    compile project(':switchbutton')
+    compile project(':android-universal-image-loader')
 
     // https://developer.android.com/studio/build/multidex.html
     compile 'com.android.support:multidex:1.0.1'
