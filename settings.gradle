@@ -1,1 +1,1 @@
-include ':app', ':easyframeforandroid', ':photoselector'
+include ':app', ':easyframeforandroid', ':photoselector', ':android-universal-image-loader', ':headimageselector'

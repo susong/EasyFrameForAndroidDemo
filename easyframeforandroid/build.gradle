@@ -33,8 +33,12 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            //默认配置
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            consumerProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //
+            //consumerProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            FileCollection proGuardFileCollection = files { file('./proguard').listFiles() }
+            consumerProguardFiles(proGuardFileCollection)
         }
         debug {
             debuggable true
