@@ -1,0 +1,26 @@
+# 所有以~结尾的目录/文件忽略，如：office文件打开时，会生成一个隐藏的此文件
+*~
+
+# 所有.DS_Store目录/文件忽略，MAC专用
+.DS_Store
+
+# 所有.iml结尾的目录/文件忽略
+*.iml
+
+# 所有.gradle目录/文件忽略
+.gradle
+
+# 所有.idea目录/文件忽略
+.idea
+
+# 所有build目录/文件忽略
+build
+
+# 当前目录下的local.properties目录/文件忽略
+/local.properties
+
+# 当前目录下的captures目录/文件忽略
+/captures
+
+# 当前目录下的extra目录/文件忽略
+/extra

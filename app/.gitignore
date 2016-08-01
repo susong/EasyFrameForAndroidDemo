@@ -1,0 +1,5 @@
+# 当前目录下的build目录/文件忽略
+/build
+
+# 当前目录下的app.iml目录/文件忽略
+/app.iml
