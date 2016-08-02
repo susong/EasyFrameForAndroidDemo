@@ -250,7 +250,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
      *
      * @param eventCenter eventCenter
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
     protected abstract void onEventComing(EventCenter eventCenter);
 
     /**
@@ -539,6 +538,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(EventCenter eventCenter) {
         if (null != eventCenter) {
             onEventComing(eventCenter);

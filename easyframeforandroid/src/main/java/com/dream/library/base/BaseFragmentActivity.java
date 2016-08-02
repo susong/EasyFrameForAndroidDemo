@@ -250,7 +250,6 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
      *
      * @param eventCenter EventCenter
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
     protected abstract void onEventComing(EventCenter eventCenter);
 
     /**
@@ -530,6 +529,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(EventCenter eventCenter) {
         if (null != eventCenter) {
             onEventComing(eventCenter);
