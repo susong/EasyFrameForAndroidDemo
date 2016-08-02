@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.dream.demo.R;
 import com.dream.demo.net.udp.UDPBroadcast;
-import com.dream.library.Log;
+import com.dream.library.AbLog;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -57,7 +57,7 @@ public class NetActivity extends AppCompatActivity {
             UDPBroadcast udpBroadcast = new UDPBroadcast(this);
             udpBroadcast.setSendPort(port);
             String data = "Hi~ 你好啊！";
-            Log.d("发送数据：" + data);
+            AbLog.d("发送数据：" + data);
             udpBroadcast.write(data.getBytes("utf-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -71,7 +71,7 @@ public class NetActivity extends AppCompatActivity {
         udpBroadcast.setReceiveListener(new ReceiveListener() {
             @Override
             public void onNetReceive(Object var1, byte[] var2) {
-                Log.d("接收到数据：" + new String(var2, Charset.forName("utf-8")));
+                AbLog.d("接收到数据：" + new String(var2, Charset.forName("utf-8")));
             }
         });
     }

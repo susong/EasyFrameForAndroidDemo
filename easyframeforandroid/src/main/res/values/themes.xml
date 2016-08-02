@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme"
+        parent="AppTheme.Base" />
+
+    <style name="AppThemeCustom"
+        parent="AppTheme.Base">
+        <item name="android:windowAnimationStyle">@style/ActivityInOutAnimation</item>
+        <item name="android:windowFullscreen">false</item>
+        <!--<item name="android:listViewStyle">@style/mListView</item>-->
+        <!--<item name="android:buttonStyle">@style/mButton</item>-->
+        <!--<item name="android:editTextStyle">@style/mEditText</item>-->
+        <!--<item name="android:checkboxStyle">@style/mCheckBox</item>-->
+        <!--<item name="android:radioButtonStyle">@style/mRadioButton</item>-->
+        <!--<item name="android:progressBarStyleHorizontal">@style/mProgressBarHorizontal</item>-->
+    </style>
+
+    <style name="AppTheme.NoneTranslucent"
+        parent="AppTheme.Base">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
+    <style name="AppTheme.Base"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!-- Actionbar color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--Status bar color-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- Use the accent color for your primary action button and components like switches or sliders.-->
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/base_bg</item>
+    </style>
+
+    <style name="SwipeBackLayout">
+        <item name="edge_size">0dp</item>
+    </style>
+</resources>

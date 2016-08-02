@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.dream.demo.R;
 import com.dream.demo.data.TitleParser;
 import com.dream.demo.entitiy.TitleEntity;
-import com.dream.library.Log;
+import com.dream.library.AbLog;
 import com.elvishew.xlog.LogConfiguration;
 import com.elvishew.xlog.LogLevel;
 import com.elvishew.xlog.XLog;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         mTitle = (TitleEntity) getIntent().getSerializableExtra("title");
 
-        Log.d(Environment.getExternalStorageDirectory().toString());
+        AbLog.d(Environment.getExternalStorageDirectory().toString());
 
         XLog.init(LogLevel.ALL,
                   new LogConfiguration                                             // If LogConfiguration not specified, will use new LogConfiguration.Builder().build()
@@ -100,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
         XLog.method();
 
 
-        Log.d("The message");
-        Log.d("The message with argument: age=%s", 18);
-        Log.json(jsonString);
-        Log.xml(xmlString);
+        AbLog.d("The message");
+        AbLog.d("The message with argument: age=%s", 18);
+        AbLog.json(jsonString);
+        AbLog.xml(xmlString);
     }
 
     private void initView() throws Exception {

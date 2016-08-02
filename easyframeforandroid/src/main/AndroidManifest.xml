@@ -4,10 +4,16 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
+        android:fullBackupContent="true"
         >
-
+        <activity
+            android:name=".base.BaseWebActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".widgets.PhotoViewActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

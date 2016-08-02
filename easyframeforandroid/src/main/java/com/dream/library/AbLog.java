@@ -14,7 +14,7 @@ import java.io.StringWriter;
  * Description: 日志类
  */
 @SuppressWarnings("unused")
-public final class Log {
+public final class AbLog {
 
     private static final String DEFAULT_TAG = "XLog";
 
@@ -38,7 +38,7 @@ public final class Log {
         init();
     }
 
-    private Log() {
+    private AbLog() {
     }
 
     /**

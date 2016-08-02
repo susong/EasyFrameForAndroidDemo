@@ -138,9 +138,6 @@ dependencies {
     // Optional: see how to use the utility.
     // compile 'com.ogaclejapan.smarttablayout:utils-v13:1.6.1@aar'
 
-    // https://github.com/chrisbanes/PhotoView
-    compile 'com.github.chrisbanes:PhotoView:1.2.6'
-
     // https://github.com/afollestad/material-dialogs
     compile 'com.afollestad.material-dialogs:core:0.8.6.1'
 
