@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.dream.demo.R;
 import com.dream.demo.net.udp.UDPBroadcast;
-import com.dream.library.AbLog;
+import com.dream.library.utils.AbLog;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

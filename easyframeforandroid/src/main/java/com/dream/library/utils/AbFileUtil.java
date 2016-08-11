@@ -24,8 +24,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 
-import com.dream.library.AbLog;
-
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 

@@ -33,7 +33,6 @@ public class MainActivity extends Activity {
         startButton.setOnClickListener(startButtonListener);
         sendButton.setOnClickListener(sendButtonListener);
         UdpBroadcastUtil.registerBroadcastReceiver(MainActivity.this);
-        sendUDP();
         service = new TcpService(MainActivity.this);
         service.start();
     }
@@ -63,7 +62,7 @@ public class MainActivity extends Activity {
 
     };
 
-    private void sendUDP() {
+    public void sendUDP() {
         String ips  = Util.getIP();
         IPS    ips2 = new IPS();
         ips2.setIp(ips);

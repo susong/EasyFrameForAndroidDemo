@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dream.library.AbLog;
+import com.dream.library.utils.AbLog;
 import com.dream.library.R;
 import com.dream.library.base.BaseAppCompatActivity;
 import com.dream.library.eventbus.EventCenter;

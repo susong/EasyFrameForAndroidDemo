@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.dream.demo.R;
 import com.dream.demo.data.TitleParser;
 import com.dream.demo.entitiy.TitleEntity;
-import com.dream.library.AbLog;
+import com.dream.library.utils.AbLog;
 import com.elvishew.xlog.LogConfiguration;
 import com.elvishew.xlog.LogLevel;
 import com.elvishew.xlog.XLog;

@@ -37,7 +37,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.ImageView;
 
-import com.dream.library.AbLog;
 import com.dream.library.base.BaseLibApplication;
 
 import java.io.ByteArrayOutputStream;
