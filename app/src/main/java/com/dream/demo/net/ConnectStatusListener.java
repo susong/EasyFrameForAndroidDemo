@@ -8,5 +8,5 @@ package com.dream.demo.net;
  * Description: ApplianceServer
  */
 public interface ConnectStatusListener {
-    void onConnectStatusChanged(Object var1, ConnectStatus var2);
+    void onConnectStatusChanged(Object obj, ConnectStatus connectStatus);
 }

@@ -8,5 +8,5 @@ package com.dream.demo.net;
  * Description: ApplianceServer
  */
 public interface ReceiveListener {
-    void onNetReceive(Object var1, byte[] var2);
+    void onNetReceive(Object obj, byte[] bytes);
 }

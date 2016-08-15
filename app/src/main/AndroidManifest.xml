@@ -29,7 +29,9 @@
 
         </activity>
         <activity android:name=".net.NetActivity"/>
+        <activity android:name=".net.NetDemoActivity"/>
         <activity android:name=".tcpservice.MainActivity"/>
+        <activity android:name=".testtcpservice.MainActivity"/>
     </application>
 
 </manifest>

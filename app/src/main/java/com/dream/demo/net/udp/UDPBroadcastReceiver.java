@@ -10,10 +10,8 @@ import com.dream.demo.net.DataConvert;
 import com.dream.demo.net.ReceiveListener;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 
@@ -24,34 +22,23 @@ import java.net.SocketTimeoutException;
  * Date:        16/6/27 下午2:11
  * Description: UDP广播发送与接收
  */
-public class UDPBroadcast {
+public class UDPBroadcastReceiver {
 
-    private static final String                     TAG                    = "UDPBroadcast";
-    private              WifiManager.MulticastLock  mLock                  = null;
-    private              int                        mReceiverPort          = 10006;
-    private              int                        mSendPort              = 10007;
-    private              InetAddress                mSendAddress           = null;
-    private              ReceiveListener            mReceiveListener       = null;
-    private              ConnectStatusListener      mConnectStatusListener = null;
-    private              UDPBroadcast.ReceiveThread mReceiveThread         = null;
-    private              boolean                    mIsRunning             = false;
+    private static final String                             TAG                    = "UDPBroadcast";
+    private              WifiManager.MulticastLock          mLock                  = null;
+    private              int                                mReceiverPort          = 10006;
+    private              ReceiveListener                    mReceiveListener       = null;
+    private              ConnectStatusListener              mConnectStatusListener = null;
+    private              UDPBroadcastReceiver.ReceiveThread mReceiveThread         = null;
+    private              boolean                            mIsRunning             = false;
 
-    public UDPBroadcast(Context context) {
+    public UDPBroadcastReceiver(Context context) {
         WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         this.mLock = manager.createMulticastLock("UDPwifi");
     }
 
     public void setReceiverPort(int receiverPort) {
         this.mReceiverPort = receiverPort;
-    }
-
-    public void setSendPort(int sendPort) {
-        this.mSendPort = sendPort;
-    }
-
-    public void setInfo(int listenPort, int sendPort) {
-        this.mReceiverPort = listenPort;
-        this.mSendPort = sendPort;
     }
 
     public void setReceiveListener(ReceiveListener listener) {
@@ -64,7 +51,7 @@ public class UDPBroadcast {
 
     public void start() {
         this.mIsRunning = true;
-        this.mReceiveThread = new UDPBroadcast.ReceiveThread();
+        this.mReceiveThread = new UDPBroadcastReceiver.ReceiveThread();
         this.mReceiveThread.start();
     }
 
@@ -73,34 +60,6 @@ public class UDPBroadcast {
         if (this.mReceiveThread != null) {
             this.mReceiveThread.interrupt();
         }
-    }
-
-    public void send(String msg) {
-        try {
-            Log.d(TAG, "UDP广播发送 " + "端口：" + mSendPort + " 数据：" + msg);
-            send(msg.getBytes("utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void send(byte[] cmd) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.d(TAG, "UDP广播发送 " + "端口：" + mSendPort + " 数据：" + DataConvert.Bytes2HexString(cmd, true));
-                    //广播地址
-                    mSendAddress = InetAddress.getByName("255.255.255.255");
-                    DatagramSocket socket = new DatagramSocket();
-                    socket.setBroadcast(true);
-                    socket.send(new DatagramPacket(cmd, cmd.length, mSendAddress, mSendPort));
-                    socket.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     class ReceiveThread extends Thread {
@@ -114,7 +73,7 @@ public class UDPBroadcast {
                 datagramSocket.setReuseAddress(true);
                 datagramSocket.bind(new InetSocketAddress(mReceiverPort));
                 if (mConnectStatusListener != null) {
-                    mConnectStatusListener.onConnectStatusChanged(UDPBroadcast.this, ConnectStatus.Connected);
+                    mConnectStatusListener.onConnectStatusChanged(UDPBroadcastReceiver.this, ConnectStatus.Connected);
                 }
 
                 Log.d(TAG, "UDP广播 " + "端口：" + mReceiverPort + " 启动接收...");
@@ -142,7 +101,7 @@ public class UDPBroadcast {
                         Log.d(TAG, "UDP广播接收：" + datagramPacket.getAddress().getHostAddress() + ":" + mReceiverPort + " 数据" + DataConvert.Bytes2HexString(dataNew, true));
                         mLock.release();
                         if (mReceiveListener != null) {
-                            mReceiveListener.onNetReceive(UDPBroadcast.this, dataNew);
+                            mReceiveListener.onNetReceive(UDPBroadcastReceiver.this, dataNew);
                         }
                     }
 
@@ -150,7 +109,7 @@ public class UDPBroadcast {
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (mIsRunning && mConnectStatusListener != null) {
-                        mConnectStatusListener.onConnectStatusChanged(UDPBroadcast.this, ConnectStatus.Error);
+                        mConnectStatusListener.onConnectStatusChanged(UDPBroadcastReceiver.this, ConnectStatus.Error);
                     }
                 }
             } catch (Exception e) {

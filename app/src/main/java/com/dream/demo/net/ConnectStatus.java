@@ -13,7 +13,4 @@ public enum ConnectStatus {
     Error,
     Mobile,
     NoNetwork;
-
-    private ConnectStatus() {
-    }
 }

@@ -3,7 +3,6 @@ package com.dream.demo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,20 +12,6 @@ import android.widget.ListView;
 import com.dream.demo.R;
 import com.dream.demo.data.TitleParser;
 import com.dream.demo.entitiy.TitleEntity;
-import com.dream.library.utils.AbLog;
-import com.elvishew.xlog.LogConfiguration;
-import com.elvishew.xlog.LogLevel;
-import com.elvishew.xlog.XLog;
-import com.elvishew.xlog.border.BorderConfiguration;
-import com.elvishew.xlog.formatter.log.DefaultLogFormatter;
-import com.elvishew.xlog.formatter.message.json.DefaultJsonFormatter;
-import com.elvishew.xlog.formatter.message.method.DefaultMethodFormatter;
-import com.elvishew.xlog.formatter.message.throwable.DefaultThrowableFormatter;
-import com.elvishew.xlog.formatter.message.xml.DefaultXmlFormatter;
-import com.elvishew.xlog.printer.AndroidPrinter;
-import com.elvishew.xlog.printer.file.FilePrinter;
-import com.elvishew.xlog.printer.file.backup.FileSizeBackupStrategy;
-import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator;
 import com.pacific.adapter.Adapter;
 import com.pacific.adapter.AdapterHelper;
 
@@ -41,7 +26,7 @@ import java.lang.reflect.Constructor;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ListView    mListView;
+    private ListView    mLvTitle;
     private TitleEntity mTitle;
 
     @Override
@@ -61,49 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         mTitle = (TitleEntity) getIntent().getSerializableExtra("title");
-
-        AbLog.d(Environment.getExternalStorageDirectory().toString());
-
-        XLog.init(LogLevel.ALL,
-                  new LogConfiguration                                             // If LogConfiguration not specified, will use new LogConfiguration.Builder().build()
-                          .Builder()                                               // The log configuration used when logging
-                                                                                   .tag("MY_TAG")                                           // Default: "XLOG"
-                                                                                   .jsonFormatter(new DefaultJsonFormatter())               // Default: DefaultJsonFormatter
-                                                                                   .xmlFormatter(new DefaultXmlFormatter())                 // Default: DefaultXmlFormatter
-                                                                                   .methodFormatter(new DefaultMethodFormatter())           // Default: DefaultMethodFormatter
-                                                                                   .throwableFormatter(new DefaultThrowableFormatter())     // Default: DefaultThrowableFormatter
-                                                                                   .build(),
-                  new AndroidPrinter(                                              // Print the log using android.util.Log, if no printer is specified, AndroidPrinter will be used by default
-                                                                                   new BorderConfiguration                                  // If BorderConfiguration not specified, will use new BorderConfiguration.Builder().enable(false).build()
-                                                                                           .Builder()                                       // The border configuration used to indicate the message
-                                                                                                                                            .enable(true)                                    // Default: false
-                                                                                                                                            .horizontalBorderChar('═')                       // Default: '═'
-                                                                                                                                            .verticalBorderChar('║')                         // Default: '║'
-                                                                                                                                            .borderLength(100)                               // Default: 100
-                                                                                                                                            .build()
-                  ),
-                  new FilePrinter                                                  // Print the log to the file system, if not specified, will not be used
-                          .Builder("/sdcard/xlog/")                                // The path to save log file
-                                                                                   .fileNameGenerator(new DateFileNameGenerator())          // Default: ChangelessFileNameGenerator("log")
-                                                                                   .backupStrategy(new FileSizeBackupStrategy(1024 * 1024)) // Default: FileSizeBackupStrategy(1024 * 1024)
-                                                                                   .logFormatter(new DefaultLogFormatter())                 // Default: DefaultLogFormatter
-                                                                                   .build());
-
-
-        String jsonString = "{name:Elvis, age: 18}";
-        String xmlString  = "<Person name=\"Elvis\" age=\"18\" />";
-        XLog.d("The message");
-        XLog.d("The message with argument: age=%s", 18);
-        XLog.json(jsonString);
-        XLog.xml(xmlString);
-        XLog.stack("Here's the call stack");
-        XLog.method();
-
-
-        AbLog.d("The message");
-        AbLog.d("The message with argument: age=%s", 18);
-        AbLog.json(jsonString);
-        AbLog.xml(xmlString);
     }
 
     private void initView() throws Exception {
@@ -127,16 +69,16 @@ public class MainActivity extends AppCompatActivity {
             mTitle = TitleParser.title;
             setContentView(R.layout.view_listview);
         }
-        mListView = (ListView) findViewById(R.id.ListView);
-        if (mListView != null) {
-            mListView.setAdapter(new Adapter<TitleEntity>(this, mTitle.getList(), R.layout.item_lv_title) {
+        mLvTitle = (ListView) findViewById(R.id.lv_title);
+        if (mLvTitle != null) {
+            mLvTitle.setAdapter(new Adapter<TitleEntity>(this, mTitle.getList(), R.layout.item_lv_title) {
                 @Override
                 protected void convert(AdapterHelper helper, TitleEntity item) {
                     helper.setText(R.id.tv_title, helper.getPosition() + 1 + "、" + item.getTitle());
                 }
             });
 
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            mLvTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(MainActivity.this, mTitle.getList().get(position).getActivityClazz());
