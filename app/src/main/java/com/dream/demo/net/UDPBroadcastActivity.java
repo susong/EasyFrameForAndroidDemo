@@ -14,11 +14,11 @@ import butterknife.ButterKnife;
  * Date:        16/7/28 下午3:37
  * Description: EasyFrameForAndroidDemo
  */
-public class UDPMulticastActivity extends BaseActivity {
+public class UDPBroadcastActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_udp_multicast);
+        setContentView(R.layout.activity_udp_broadcast);
         ButterKnife.bind(this);
         init();
     }

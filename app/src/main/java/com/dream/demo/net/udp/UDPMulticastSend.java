@@ -2,7 +2,7 @@ package com.dream.demo.net.udp;
 
 import android.util.Log;
 
-import com.dream.demo.net.DataConvert;
+import com.dream.demo.net.utils.DataConvert;
 
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;

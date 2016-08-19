@@ -1,4 +1,4 @@
-package com.dream.demo.net;
+package com.dream.demo.net.interf;
 
 /**
  * Author:      SuSong
@@ -7,6 +7,10 @@ package com.dream.demo.net;
  * Date:        16/6/27 上午10:42
  * Description: ApplianceServer
  */
-public interface ConnectStatusListener {
-    void onConnectStatusChanged(Object obj, ConnectStatus connectStatus);
+public enum ConnectStatus {
+    Connected,
+    DisConnected,
+    Error,
+    Mobile,
+    NoNetwork;
 }

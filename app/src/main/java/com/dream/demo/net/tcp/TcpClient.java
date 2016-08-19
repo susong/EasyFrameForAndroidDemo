@@ -3,73 +3,75 @@ package com.dream.demo.net.tcp;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.dream.demo.net.ConnectStatus;
-import com.dream.demo.net.ConnectStatusListener;
-import com.dream.demo.net.DataConvert;
-import com.dream.demo.net.ReceiveListener;
+import com.dream.demo.net.interf.ConnectStatus;
+import com.dream.demo.net.interf.ConnectStatusListener;
+import com.dream.demo.net.utils.DataConvert;
+import com.dream.demo.net.interf.ReceiveListener;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
+ * Author:      SuSong
+ * Email:       751971697@qq.com | susong0618@163.com
+ * GitHub:      https://github.com/susong0618
+ * Date:        16/8/15 下午3:32
+ * Description: EasyFrameForAndroidDemo
  * 会保持长连接，中间断开后也会自动重连，直到调用stop()为止
  */
-public class TcpClient implements Communication_Net {
+public class TcpClient {
 
-    private static final boolean               DEBUG           = true;
-    private static final String                tag             = "TcpClient";
-    private              String                host            = "127.0.0.1";
-    private              int                   port            = 0;
-    private              Socket                socket          = null;
-    private              InputStream           in              = null;
-    private              OutputStream          out             = null;
-    private              ReceiveListener       receiveListener = null;
-    private              ConnectStatusListener statusListener  = null;
-    private              boolean               isStop          = true;
-    /**
-     * 0-未连接 1-连接中 2-已连接
-     */
-    private              int                   isConnected     = 0;
-    private ConnectStatus currentStatus;
-    private String        error;
+    private static final boolean               DEBUG            = true;
+    private static final String                TAG              = "TcpClient";
+    private              String                mHost            = "127.0.0.1";
+    private              int                   mPort            = 8888;
+    private              Socket                mSocket          = null;
+    private              InputStream           mIn              = null;
+    private              OutputStream          mOut             = null;
+    private              ReceiveListener       mReceiveListener = null;
+    private              ConnectStatusListener mStatusListener  = null;
+    private              boolean               mIsStop          = true;
+    private              ConnectStatus         mConnectStatus   = null;
+    private              String                mError           = null;
+    /** 0-未连接 1-连接中 2-已连接 */
+    private              int                   mIsConnected     = 0;
 
-    @Override
-    public void SetInfo(Object host, Object port) {
-        host = String.valueOf(host);
-
+    public void setInfo(Object host, Object port) {
+        this.mHost = String.valueOf(host);
         try {
-            port = Integer.valueOf(String.valueOf(port));
+            this.mPort = Integer.valueOf(String.valueOf(port));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void SetReceiveListener(ReceiveListener callback) {
-        this.receiveListener = callback;
+    public void setReceiveListener(ReceiveListener callback) {
+        this.mReceiveListener = callback;
     }
 
-    @Override
-    public void Start() {
-        isStop = false;
-
+    public void start() {
+        if (DEBUG) {
+            Log.e(TAG, "TcpClient 开始 IP:" + mHost + " 端口:" + mPort);
+        }
+        mIsStop = false;
         ClientThread clientThread = new ClientThread();
         clientThread.start();
     }
 
-    @Override
-    public void Stop() {
-        Log.e(tag, "TCP stop");
+    public void stop() {
+        if (DEBUG) {
+            Log.e(TAG, "TcpClient stop");
+        }
+        mIsStop = true;
+        mIsConnected = 0;
 
-        isStop = true;
-        isConnected = 0;
-
-        if (socket != null) {
+        if (mSocket != null) {
             try {
-                socket.close();
+                mSocket.close();
             } catch (IOException ignored) {
             }
         }
@@ -77,57 +79,64 @@ public class TcpClient implements Communication_Net {
         onConnectStatusChanged(ConnectStatus.DisConnected, "TcpClient stop");
     }
 
-    @Override
-    public void Write(byte[] cmd) {
-        if (isConnected < 2 || cmd == null || cmd.length < 1 || out == null) {
+    public void send(String msg) {
+        try {
+            if (DEBUG) {
+                Log.d(TAG, "TcpClient 发送 端口:" + mPort + " 数据:" + msg);
+            }
+            send(msg.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void send(byte[] cmd) {
+        if (mIsConnected < 2 || cmd == null || cmd.length < 1 || mOut == null) {
             return;
         }
 
         if (DEBUG) {
-            Log.i(tag, "发送：" + DataConvert.Bytes2HexString(cmd, true));
+            Log.i(TAG, "TcpClient 发送 端口:" + mPort + " 数据:" + DataConvert.Bytes2HexString(cmd, true));
         }
 
         try {
-            out.write(cmd);
-            out.flush();
+            mOut.write(cmd);
+            mOut.flush();
         } catch (IOException e) {
-            Log.e(tag, e.getMessage());
+            e.printStackTrace();
             onConnectStatusChanged(ConnectStatus.Error, e.getMessage());
         }
     }
 
-    @Override
-    public void SetStatusListener(ConnectStatusListener listener) {
-        this.statusListener = listener;
+    public void setStatusListener(ConnectStatusListener listener) {
+        this.mStatusListener = listener;
     }
 
-    @Override
     public ConnectStatus getStatus() {
-        return currentStatus;
+        return mConnectStatus;
     }
 
-    @Override
     public String getError() {
-        return error;
+        return mError;
     }
 
     private void onConnectStatusChanged(ConnectStatus status, String error) {
-        currentStatus = status;
-        this.error = error;
+        mConnectStatus = status;
+        this.mError = error;
 
-        if (statusListener != null) {
-            statusListener.onConnectStatusChanged(this, currentStatus);
+        if (mStatusListener != null) {
+            mStatusListener.onConnectStatusChanged(this, mConnectStatus);
         }
 
         if (status == ConnectStatus.Error) {
             try {
-                socket.close();
+                mSocket.close();
             } catch (IOException ignored) {
             }
 
-            isConnected = 0;
+            mIsConnected = 0;
 
-            if (!isStop) {
+            if (!mIsStop) {
                 SystemClock.sleep(1000);
 
                 ClientThread clientThread = new ClientThread();
@@ -136,80 +145,112 @@ public class TcpClient implements Communication_Net {
         }
     }
 
-    class ClientThread extends Thread {
+    private class ClientThread extends Thread {
+
         @Override
         public void run() {
-            if (isStop || isConnected > 0)
+            if (mIsStop || mIsConnected > 0) {
                 return;//已停止 或 正在连接 或 已连接
-            isConnected = 1;
-            Log.i(tag, "开始连接：" + host + ":" + port);
+            }
+            mIsConnected = 1;
+            if (DEBUG) {
+                Log.i(TAG, "开始连接 IP:" + mHost + " 端口:" + mPort);
+            }
 
             try {
-                socket = new Socket();
-                socket.setTcpNoDelay(true);
-                socket.setKeepAlive(true);
-                socket.connect(new InetSocketAddress(host, port), 3000);
+                mSocket = new Socket();
+                mSocket.setTcpNoDelay(true);
+                mSocket.setKeepAlive(true);
+                mSocket.connect(new InetSocketAddress(mHost, mPort), 3000);
 
-                in = socket.getInputStream();
-                out = socket.getOutputStream();
-                isConnected = 2;
+                //mIn = mSocket.getInputStream();
+                //mOut = mSocket.getOutputStream();
+                mIsConnected = 2;
+
             } catch (IOException e) {
-                Log.e(tag, e.getMessage());
+                Log.e(TAG, e.getMessage());
                 onConnectStatusChanged(ConnectStatus.Error, e.getMessage());
             }
 
-            if (isConnected == 2) {
-                Log.i(tag, "连接成功！");
+            if (mIsConnected == 2) {
+
+                if (DEBUG) {
+                    Log.i(TAG, "连接成功");
+                }
                 onConnectStatusChanged(ConnectStatus.Connected, "连接成功");
 
-                ReceiveThread thread = new ReceiveThread();
-                thread.start();
+                new Thread(new ReceiveThread(mSocket)).start();
             }
 
-            Log.i(tag, host + ":" + port + " 连接线程退出");
+            if (DEBUG) {
+                Log.i(TAG, mHost + ":" + mPort + " 连接线程退出");
+            }
         }
     }
 
-    class ReceiveThread extends Thread {
+    private class ReceiveThread implements Runnable {
+
+        private String mLocalAddress;//本地地址，客户端地址
+        private String mInetAddress;//远程地址，服务端地址
+        private Socket mSocket;
+
+        public ReceiveThread(Socket socket) {
+            this.mSocket = socket;
+            this.mLocalAddress = socket.getLocalAddress().getHostAddress();
+            this.mInetAddress = socket.getInetAddress().getHostAddress();
+            try {
+                mIn = socket.getInputStream();
+                mOut = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         @Override
         public void run() {
             byte[] buffer = new byte[1024];
             int    length;
 
-            if (DEBUG)
-                Log.i(tag, "开始接收...");
+            if (DEBUG) {
+                Log.i(TAG, "开始接收...");
+            }
 
-            while (!isStop) {
+            while (!mIsStop) {
                 try {
-                    length = in.read(buffer);
+                    length = mIn.read(buffer);
                 } catch (IOException e) {
-                    if (!isStop) {
-                        Log.e(tag, e.getMessage());
+                    if (!mIsStop) {
+                        Log.e(TAG, e.getMessage());
                         onConnectStatusChanged(ConnectStatus.Error, "连接中断");
                     }
                     break;
                 }
 
-                if (length == -1)//连接中断
+                if (length == -1) {//连接中断
                     break;
+                }
 
-                if (length < 1)
+                if (length < 1) {
                     continue;
+                }
 
                 byte[] data = new byte[length];
                 System.arraycopy(buffer, 0, data, 0, length);
 
-                if (DEBUG)
-                    Log.i(tag, "接收到：" + DataConvert.Bytes2HexString(data, true));
+                if (DEBUG) {
+                    Log.i(TAG, "接收到：" + DataConvert.Bytes2HexString(data, true));
+                }
 
                 try {
-                    receiveListener.onNetReceive(TcpClient.this, data);
-                } catch (Exception ex) {
-                    Log.e(tag, "", ex);
+                    mReceiveListener.onNetReceive(TcpClient.this, data);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-
-            Log.i(tag, host + ":" + port + " 接收线程退出");
+            if (DEBUG) {
+                Log.i(TAG, mInetAddress + ":" + mPort + " 接收线程退出");
+            }
         }
     }
 }

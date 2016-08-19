@@ -6,6 +6,7 @@ import com.dream.demo.activity.TempActivity;
 import com.dream.demo.entitiy.TitleEntity;
 import com.dream.demo.net.NetActivity;
 import com.dream.demo.net.NetDemoActivity;
+import com.dream.demo.net.TcpActivity;
 import com.dream.demo.view.CustomPath1View;
 import com.dream.demo.view.CustomPath2View;
 import com.dream.demo.view.CustomPath3View;
@@ -42,8 +43,8 @@ public class Title {
     public static TitleEntity title_c_001_004_006 = new TitleEntity("UDP多播发送和接收", R.layout.activity_temp, TempActivity.class);
     public static TitleEntity title_c_001_004_007 = new TitleEntity("UDP服务端", R.layout.activity_temp, TempActivity.class);
     public static TitleEntity title_c_001_004_008 = new TitleEntity("UDP客户端", R.layout.activity_temp, TempActivity.class);
-    public static TitleEntity title_c_001_004_009 = new TitleEntity("TCP服务端", R.layout.activity_temp, TempActivity.class);
-    public static TitleEntity title_c_001_004_010 = new TitleEntity("TCP客户端", R.layout.activity_temp, TempActivity.class);
+    public static TitleEntity title_c_001_004_009 = new TitleEntity("TCP服务端", R.layout.activity_net, TcpActivity.class);
+    public static TitleEntity title_c_001_004_010 = new TitleEntity("TCP客户端", R.layout.activity_net, TcpActivity.class);
     public static TitleEntity title_c_001_004_011 = new TitleEntity("UDP广播发送和接收", R.layout.activity_net_demo, NetDemoActivity.class);
     public static TitleEntity title_c_001_004_012 = new TitleEntity("Android UDP广播发送和接收服务", R.layout.activity_udp, com.dream.demo.tcpservice.MainActivity.class);
     public static TitleEntity title_c_001_004_013 = new TitleEntity("Android UDP广播发送和接收服务2", R.layout.activity_udp, com.dream.demo.testtcpservice.MainActivity.class);

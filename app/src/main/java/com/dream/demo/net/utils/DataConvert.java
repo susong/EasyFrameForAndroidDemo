@@ -1,4 +1,4 @@
-package com.dream.demo.net;
+package com.dream.demo.net.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
  * Date:        16/6/27 上午10:44
  * Description: ApplianceServer
  */
+@SuppressWarnings("unused")
 public class DataConvert {
     private static String hexString = "0123456789ABCDEF";
 

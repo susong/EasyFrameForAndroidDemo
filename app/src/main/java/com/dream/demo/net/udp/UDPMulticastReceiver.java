@@ -4,10 +4,10 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
-import com.dream.demo.net.ConnectStatus;
-import com.dream.demo.net.ConnectStatusListener;
-import com.dream.demo.net.DataConvert;
-import com.dream.demo.net.ReceiveListener;
+import com.dream.demo.net.interf.ConnectStatus;
+import com.dream.demo.net.interf.ConnectStatusListener;
+import com.dream.demo.net.utils.DataConvert;
+import com.dream.demo.net.interf.ReceiveListener;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

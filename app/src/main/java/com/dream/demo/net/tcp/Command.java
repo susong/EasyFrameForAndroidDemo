@@ -2,8 +2,8 @@ package com.dream.demo.net.tcp;
 
 import android.util.Log;
 
-import com.dream.demo.net.DataConvert;
-import com.dream.demo.net.ResolveCommandListener;
+import com.dream.demo.net.utils.DataConvert;
+import com.dream.demo.net.interf.ResolveCommandListener;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

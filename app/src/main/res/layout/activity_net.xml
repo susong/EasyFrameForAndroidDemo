@@ -46,7 +46,7 @@
                 />
 
             <Button
-                android:id="@+id/btn_start_server"
+                android:id="@+id/btn_server_start"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_margin="0dp"
@@ -155,7 +155,7 @@
                 />
 
             <Button
-                android:id="@+id/btn_start_client"
+                android:id="@+id/btn_client_start"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_margin="0dp"

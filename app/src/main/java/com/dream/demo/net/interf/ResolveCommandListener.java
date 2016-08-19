@@ -1,4 +1,4 @@
-package com.dream.demo.net;
+package com.dream.demo.net.interf;
 
 /**
  * Author:      SuSong

@@ -1,7 +1,6 @@
 package com.dream.demo.net;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,9 +9,11 @@ import android.widget.ListView;
 import com.dream.demo.R;
 import com.dream.demo.activity.BaseActivity;
 import com.dream.demo.net.interf.ReceiveListener;
-import com.dream.demo.net.udp.UDPBroadcastReceiver;
+import com.dream.demo.net.tcp.TcpClient;
+import com.dream.demo.net.tcp.TcpServer;
 import com.dream.demo.net.udp.UDPBroadcastSend;
 import com.dream.demo.net.udp.UDPMulticastSend;
+import com.dream.demo.net.utils.WifiManagerUtils;
 import com.dream.library.utils.AbLog;
 
 import java.io.UnsupportedEncodingException;
@@ -28,18 +29,18 @@ import butterknife.OnClick;
  * Date:        16/8/15 上午11:02
  * Description: EasyFrameForAndroidDemo
  */
-public class NetActivity extends BaseActivity {
+public class TcpActivity extends BaseActivity {
 
     @BindView(R.id.et_server_ip)             EditText         mEtServerIp;
     @BindView(R.id.et_server_port)           EditText         mEtServerPort;
-    @BindView(R.id.btn_server_start)         Button           mBtnStartServer;
+    @BindView(R.id.btn_server_start)         Button           mBtnServerStart;
     @BindView(R.id.et_server_send_message)   EditText         mEtServerSendMessage;
     @BindView(R.id.btn_server_send)          Button           mBtnServerSend;
     @BindView(R.id.btn_server_clear_message) Button           mBtnServerClearMessage;
     @BindView(R.id.lv_server_msg)            ListView         mLvServerMsg;
     @BindView(R.id.et_client_ip)             EditText         mEtClientIp;
     @BindView(R.id.et_client_port)           EditText         mEtClientPort;
-    @BindView(R.id.btn_client_start)         Button           mBtnStartClient;
+    @BindView(R.id.btn_client_start)         Button           mBtnClientStart;
     @BindView(R.id.et_client_send_message)   EditText         mEtClientSendMessage;
     @BindView(R.id.btn_client_send)          Button           mBtnClientSend;
     @BindView(R.id.btn_client_clear_message) Button           mBtnClientClearMessage;
@@ -52,6 +53,8 @@ public class NetActivity extends BaseActivity {
     private                                  String           mClientSendMessage;
     private                                  UDPBroadcastSend mUdpBroadcastSend;
     private                                  UDPMulticastSend mUDPMulticastSend;
+    private                                  TcpServer        mTcpServer;
+    private                                  TcpClient        mTcpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,47 +73,52 @@ public class NetActivity extends BaseActivity {
                      R.id.btn_client_clear_message
              })
     public void onClick(View view) {
-        getInputInfo();
         switch (view.getId()) {
             case R.id.btn_server_start:
-
-                break;
-            case R.id.btn_server_send:
-                UDPBroadcastReceiver udpBroadcastReceiver = new UDPBroadcastReceiver(getApplicationContext());
-                if (!TextUtils.isEmpty(mServerPort)) {
-                    udpBroadcastReceiver.setReceiverPort(Integer.parseInt(mServerPort));
-                }
-                udpBroadcastReceiver.setReceiveListener(new ReceiveListener() {
+                mTcpServer = new TcpServer();
+                mTcpServer.setPort(Integer.parseInt(mEtServerPort.getText().toString().trim()));
+                mTcpServer.setReceiveListener(new ReceiveListener() {
                     @Override
                     public void onNetReceive(Object obj, byte[] bytes) {
                         try {
-                            AbLog.d(new String(bytes, "utf-8"));
+                            String s = obj.toString() + "  " + new String(bytes, "utf-8");
+                            AbLog.d("server onNetReceive:" + s);
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     }
                 });
-                udpBroadcastReceiver.start();
+                mTcpServer.start();
+                break;
+            case R.id.btn_server_send:
+                if (mTcpServer == null) {
+                    return;
+                }
+                mTcpServer.send(mEtServerSendMessage.getText().toString().trim());
                 break;
             case R.id.btn_server_clear_message:
                 break;
             case R.id.btn_client_start:
-                //                mUDPMulticastSend = new UDPMulticastSend();
-                //                if (!TextUtils.isEmpty(mClientPort)) {
-                //                    mUDPMulticastSend.setSendPort(Integer.parseInt(mClientPort));
-                //                }
-                mUdpBroadcastSend = new UDPBroadcastSend();
-                if (!TextUtils.isEmpty(mClientPort)) {
-                    mUdpBroadcastSend.setSendPort(Integer.parseInt(mClientPort));
-                }
+                mTcpClient = new TcpClient();
+                mTcpClient.setInfo(mEtClientIp.getText().toString().trim(), Integer.parseInt(mEtClientPort.getText().toString().trim()));
+                mTcpClient.setReceiveListener(new ReceiveListener() {
+                    @Override
+                    public void onNetReceive(Object obj, byte[] bytes) {
+                        try {
+                            String s = obj.toString() + " " + new String(bytes, "utf-8");
+                            AbLog.d("client onNetReceive:" + s);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                mTcpClient.start();
                 break;
             case R.id.btn_client_send:
-                //                if (mUDPMulticastSend != null && !TextUtils.isEmpty(mClientSendMessage)) {
-                //                    mUDPMulticastSend.send(mClientSendMessage);
-                //                }
-                if (mUdpBroadcastSend != null && !TextUtils.isEmpty(mClientSendMessage)) {
-                    mUdpBroadcastSend.send(mClientSendMessage);
+                if (mTcpClient == null) {
+                    return;
                 }
+                mTcpClient.send(mEtClientSendMessage.getText().toString().trim());
                 break;
             case R.id.btn_client_clear_message:
                 break;
@@ -119,6 +127,19 @@ public class NetActivity extends BaseActivity {
 
     private void init() {
 
+        String localIpAddress1 = WifiManagerUtils.getLocalIpAddress(this);
+
+        String localIpAddress = WifiManagerUtils.getLocalIpAddress();
+
+
+        String broadcastAddress = WifiManagerUtils.getBroadcastAddress(this);
+
+        String currentIpAddress = WifiManagerUtils.getBroadcastAddress2(this);
+
+        AbLog.d("localIpAddress1:" + localIpAddress1);
+        AbLog.d("localIpAddress:" + localIpAddress);
+        AbLog.d("broadcastAddress:" + broadcastAddress);
+        AbLog.d("currentIpAddress:" + currentIpAddress);
     }
 
     private void getInputInfo() {
