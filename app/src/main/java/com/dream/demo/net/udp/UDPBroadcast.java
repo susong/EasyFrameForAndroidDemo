@@ -27,6 +27,7 @@ import java.net.SocketTimeoutException;
 public class UDPBroadcast {
 
     private static final String                     TAG                    = "UDPBroadcast";
+    private static final boolean                    DEBUG                  = true;
     private              WifiManager.MulticastLock  mLock                  = null;
     private              int                        mReceiverPort          = 10006;
     private              int                        mSendPort              = 10007;

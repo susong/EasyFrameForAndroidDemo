@@ -179,8 +179,8 @@ public class TcpServer {
 
                 try {
                     mReceiveListener.onNetReceive(mInetAddress, data);
-                } catch (Exception ex) {
-                    Log.e(TAG, "", ex);
+                } catch (Exception e) {
+                    Log.e(TAG, "", e);
                 }
             }
 

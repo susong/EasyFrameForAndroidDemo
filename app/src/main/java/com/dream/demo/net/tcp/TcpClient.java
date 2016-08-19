@@ -25,8 +25,8 @@ import java.net.Socket;
  */
 public class TcpClient {
 
-    private static final boolean               DEBUG            = true;
     private static final String                TAG              = "TcpClient";
+    private static final boolean               DEBUG            = true;
     private              String                mHost            = "127.0.0.1";
     private              int                   mPort            = 8888;
     private              Socket                mSocket          = null;
@@ -245,7 +245,7 @@ public class TcpClient {
                 try {
                     mReceiveListener.onNetReceive(TcpClient.this, data);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "", e);
                 }
             }
             if (DEBUG) {
