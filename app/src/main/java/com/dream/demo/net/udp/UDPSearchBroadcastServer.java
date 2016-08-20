@@ -3,7 +3,8 @@ package com.dream.demo.net.udp;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.dream.library.utils.AbLog;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -45,7 +46,7 @@ public class UDPSearchBroadcastServer {
             }).start();
         } else {
             if (DEBUG) {
-                Log.i(TAG, "Server UDP搜索已经启动");
+                AbLog.i(TAG, "Server UDP搜索已经启动");
             }
         }
     }
@@ -62,7 +63,7 @@ public class UDPSearchBroadcastServer {
             mDatagramSocket = null;
         }
         if (DEBUG) {
-            Log.i(TAG, "Server 停止UDP搜索");
+            AbLog.i(TAG, "Server 停止UDP搜索");
         }
     }
 
@@ -72,7 +73,7 @@ public class UDPSearchBroadcastServer {
     private void searchUDP() {
         try {
             if (DEBUG) {
-                Log.i(TAG, "Server 启动UDP搜索");
+                AbLog.i(TAG, "Server 启动UDP搜索");
             }
             mIsStop = false;
             mDatagramSocket = new DatagramSocket(mPort);
@@ -81,13 +82,13 @@ public class UDPSearchBroadcastServer {
             DatagramPacket sendDatagramPacket    = new DatagramPacket(mResponse.getBytes(), 0, mResponse.getBytes().length);
             while (!mIsStop) {
                 if (DEBUG) {
-                    Log.i(TAG, "Server 开始UDP搜索");
+                    AbLog.i(TAG, "Server 开始UDP搜索");
                 }
                 // 阻塞线程
                 mDatagramSocket.receive(receiveDatagramPacket);
                 String receive = new String(receiveDatagramPacket.getData(), 0, receiveDatagramPacket.getLength());
                 if (DEBUG) {
-                    Log.i(TAG, "Server UDP搜索到数据：" + receive);
+                    AbLog.i(TAG, "Server UDP搜索到数据：" + receive);
                 }
                 if (!TextUtils.isEmpty(receive) && receive.equals(mReceive)) {
                     if (mOnReceiverListener != null) {
@@ -98,14 +99,14 @@ public class UDPSearchBroadcastServer {
                     }
                     sendDatagramPacket.setSocketAddress(receiveDatagramPacket.getSocketAddress());
                     if (DEBUG) {
-                        Log.i(TAG, "Server UDP返回数据：" + mResponse);
+                        AbLog.i(TAG, "Server UDP返回数据：" + mResponse);
                     }
                     mDatagramSocket.send(sendDatagramPacket);
                 }
             }
         } catch (Exception e) {
             if (DEBUG && !mIsStop) {
-                Log.e(TAG, "Server UDP搜索出错", e);
+                AbLog.e(TAG, "Server UDP搜索出错", e);
             }
             mIsStop = true;
         }

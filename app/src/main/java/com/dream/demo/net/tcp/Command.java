@@ -43,8 +43,9 @@ public class Command {
             command = create(messageType, data, data.length);
         }
 
-        if (DEBUG)
+        if (DEBUG) {
             Log.d(TAG, String.format("Create Net指令: 0x%02X %s", messageType, message));
+        }
 
         return command;
     }
@@ -145,8 +146,9 @@ public class Command {
 
                     String jsonString = new String(dataByte, "UTF-8");
 
-                    if (DEBUG)
+                    if (DEBUG) {
                         Log.d(TAG, String.format("Resolve Net指令: 0x%02X %s", messageType, jsonString));
+                    }
 
                     resolveCommandListener.resolveCommandHandle(sender, messageType, jsonString);
                 }
@@ -163,7 +165,9 @@ public class Command {
                     messageByteNew[i] = messageByte[i];
                 }
                 messageList.clear();
-                Log.e(TAG, "无法解析的指令：" + DataConvert.Bytes2HexString(messageByteNew, true));
+                if (DEBUG) {
+                    Log.e(TAG, "无法解析的指令：" + DataConvert.Bytes2HexString(messageByteNew, true));
+                }
                 e.printStackTrace();
             }
         }

@@ -8,15 +8,12 @@ import android.widget.ListView;
 
 import com.dream.demo.R;
 import com.dream.demo.activity.BaseActivity;
-import com.dream.demo.net.interf.ReceiveListener;
 import com.dream.demo.net.tcp.TcpClient;
 import com.dream.demo.net.tcp.TcpServer;
 import com.dream.demo.net.udp.UDPBroadcastSend;
 import com.dream.demo.net.udp.UDPMulticastSend;
 import com.dream.demo.net.utils.WifiManagerUtils;
 import com.dream.library.utils.AbLog;
-
-import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,20 +72,20 @@ public class TcpActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_server_start:
-                mTcpServer = new TcpServer();
-                mTcpServer.setPort(Integer.parseInt(mEtServerPort.getText().toString().trim()));
-                mTcpServer.setReceiveListener(new ReceiveListener() {
-                    @Override
-                    public void onNetReceive(Object obj, byte[] bytes) {
-                        try {
-                            String s = obj.toString() + "  " + new String(bytes, "utf-8");
-                            AbLog.d("server onNetReceive:" + s);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                mTcpServer.start();
+//                mTcpServer = new TcpServer();
+//                mTcpServer.setPort(Integer.parseInt(mEtServerPort.getText().toString().trim()));
+//                mTcpServer.setReceiveListener(new ReceiveListener() {
+//                    @Override
+//                    public void onNetReceive(Object obj, byte[] bytes) {
+//                        try {
+//                            String s = obj.toString() + "  " + new String(bytes, "utf-8");
+//                            AbLog.d("server onNetReceive:" + s);
+//                        } catch (UnsupportedEncodingException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//                mTcpServer.start();
                 break;
             case R.id.btn_server_send:
                 if (mTcpServer == null) {
@@ -99,20 +96,20 @@ public class TcpActivity extends BaseActivity {
             case R.id.btn_server_clear_message:
                 break;
             case R.id.btn_client_start:
-                mTcpClient = new TcpClient();
-                mTcpClient.setInfo(mEtClientIp.getText().toString().trim(), Integer.parseInt(mEtClientPort.getText().toString().trim()));
-                mTcpClient.setReceiveListener(new ReceiveListener() {
-                    @Override
-                    public void onNetReceive(Object obj, byte[] bytes) {
-                        try {
-                            String s = obj.toString() + " " + new String(bytes, "utf-8");
-                            AbLog.d("client onNetReceive:" + s);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                mTcpClient.start();
+//                mTcpClient = new TcpClient();
+//                mTcpClient.setHostAndPort(mEtClientIp.getText().toString().trim(), Integer.parseInt(mEtClientPort.getText().toString().trim()));
+//                mTcpClient.setReceiveListener(new ReceiveListener() {
+//                    @Override
+//                    public void onNetReceive(Object obj, byte[] bytes) {
+//                        try {
+//                            String s = obj.toString() + " " + new String(bytes, "utf-8");
+//                            AbLog.d("client onNetReceive:" + s);
+//                        } catch (UnsupportedEncodingException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//                mTcpClient.start();
                 break;
             case R.id.btn_client_send:
                 if (mTcpClient == null) {

@@ -7,7 +7,8 @@ import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.dream.library.utils.AbLog;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -31,8 +32,7 @@ public class UDPSearchBroadcastClient {
     private String             mReceive;
     private onReceiverListener mOnReceiverListener;
     private boolean mIsStop = true;
-    private ReceiverRunnable mReceiverRunnable;
-    private DatagramSocket   mDatagramSocket;
+    private DatagramSocket mDatagramSocket;
 
     public UDPSearchBroadcastClient(Builder builder) {
         this.mContext = builder.mContext;
@@ -56,19 +56,13 @@ public class UDPSearchBroadcastClient {
             }).start();
         } else {
             if (DEBUG) {
-                Log.i(TAG, "Client UDP搜索已经启动");
+                AbLog.i(TAG, "Client UDP搜索已经启动");
             }
         }
     }
 
     public void stop() {
         mIsStop = true;
-        if (mReceiverRunnable != null) {
-            if (!mReceiverRunnable.isStop()) {
-                mReceiverRunnable.stopReceiverRunnable();
-                mReceiverRunnable = null;
-            }
-        }
         if (mDatagramSocket != null) {
             if (mDatagramSocket.isConnected()) {
                 mDatagramSocket.disconnect();
@@ -79,22 +73,21 @@ public class UDPSearchBroadcastClient {
             mDatagramSocket = null;
         }
         if (DEBUG) {
-            Log.i(TAG, "Client 停止UDP搜索");
+            AbLog.i(TAG, "Client 停止UDP搜索");
         }
     }
 
     private void searchUDP() {
         try {
             if (DEBUG) {
-                Log.i(TAG, "Client 启动UDP搜索");
+                AbLog.i(TAG, "Client 启动UDP搜索");
             }
             mIsStop = false;
             mDatagramSocket = new DatagramSocket();
             mDatagramSocket.setReuseAddress(true);
             //mDatagramSocket.setSoTimeout(1000);
 
-            mReceiverRunnable = new ReceiverRunnable(mDatagramSocket);
-            new Thread(mReceiverRunnable).start();
+            new Thread(new ReceiverRunnable(mDatagramSocket)).start();
 
             byte[] requestBytes     = mRequest.getBytes("utf-8");
             String broadcastAddress = getBroadcastAddress(mContext);
@@ -102,14 +95,14 @@ public class UDPSearchBroadcastClient {
                                                                       new InetSocketAddress(broadcastAddress, mPort));
             while (!mIsStop) {
                 if (DEBUG) {
-                    Log.i(TAG, "Client 发送UDP搜索：" + mRequest);
+                    AbLog.i(TAG, "Client 发送UDP搜索：" + mRequest);
                 }
                 mDatagramSocket.send(requestDatagramPacket);
                 Thread.sleep(1000);
             }
         } catch (Exception e) {
             if (DEBUG) {
-                Log.e(TAG, "Client UDP搜索出错");
+                AbLog.e(TAG, "Client UDP搜索出错");
             }
             mIsStop = true;
             e.printStackTrace();
@@ -121,50 +114,31 @@ public class UDPSearchBroadcastClient {
      */
     private class ReceiverRunnable implements Runnable {
 
-        private boolean        mIsStop         = true;
         private DatagramSocket mDatagramSocket = null;
 
         public ReceiverRunnable(DatagramSocket datagramSocket) {
             this.mDatagramSocket = datagramSocket;
         }
 
-        public void stopReceiverRunnable() {
-            mIsStop = true;
-            if (mDatagramSocket != null) {
-                if (mDatagramSocket.isConnected()) {
-                    mDatagramSocket.disconnect();
-                }
-                if (!mDatagramSocket.isClosed()) {
-                    mDatagramSocket.close();
-                }
-                mDatagramSocket = null;
-            }
-        }
-
-        public boolean isStop() {
-            return mIsStop;
-        }
-
         @Override
         public void run() {
             try {
-                mIsStop = false;
                 byte[]         receiveBytes          = new byte[1024];
                 DatagramPacket receiveDatagramPacket = new DatagramPacket(receiveBytes, receiveBytes.length);
                 while (!mIsStop) {
                     if (DEBUG) {
-                        Log.i(TAG, "Client 开始UDP搜索");
+                        AbLog.i(TAG, "Client 开始UDP搜索");
                     }
                     // 阻塞线程
                     mDatagramSocket.receive(receiveDatagramPacket);
                     String receive = new String(receiveDatagramPacket.getData(), receiveDatagramPacket.getOffset(), receiveDatagramPacket.getLength(), "UTF-8");
                     if (DEBUG) {
-                        Log.i(TAG, "Client UDP搜索到数据：" + receive);
+                        AbLog.i(TAG, "Client UDP搜索到数据：" + receive);
                     }
                     if (!TextUtils.isEmpty(receive) && receive.equals(mReceive)) {
                         String hostAddress = receiveDatagramPacket.getAddress().getHostAddress();
                         if (DEBUG) {
-                            Log.i(TAG, "Client UDP搜索到的服务器地址：" + hostAddress);
+                            AbLog.i(TAG, "Client UDP搜索到的服务器地址：" + hostAddress);
                         }
                         if (mOnReceiverListener != null) {
                             mOnReceiverListener.onReceiver(hostAddress);
@@ -174,9 +148,8 @@ public class UDPSearchBroadcastClient {
                 }
             } catch (Exception e) {
                 if (DEBUG && !mIsStop) {
-                    Log.e(TAG, "Client UDP搜索出错", e);
+                    AbLog.e(TAG, "Client UDP搜索出错", e);
                 }
-                mIsStop = true;
             }
         }
     }
@@ -214,11 +187,6 @@ public class UDPSearchBroadcastClient {
         private String  mReceive = "response";
         private onReceiverListener mOnReceiverListener;
 
-        public Builder context(Context context) {
-            this.mContext = context;
-            return this;
-        }
-
         public Builder port(int port) {
             this.mPort = port;
             return this;
@@ -239,7 +207,8 @@ public class UDPSearchBroadcastClient {
             return this;
         }
 
-        public UDPSearchBroadcastClient build() {
+        public UDPSearchBroadcastClient build(Context context) {
+            this.mContext = context;
             return new UDPSearchBroadcastClient(this);
         }
     }

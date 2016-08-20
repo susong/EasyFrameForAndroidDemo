@@ -8,6 +8,8 @@ import com.dream.demo.net.NetActivity;
 import com.dream.demo.net.NetDemoActivity;
 import com.dream.demo.net.TcpActivity;
 import com.dream.demo.net.UdpSearchActivity;
+import com.dream.demo.net.UdpTcpClientActivity;
+import com.dream.demo.net.UdpTcpServerActivity;
 import com.dream.demo.view.CustomPath1View;
 import com.dream.demo.view.CustomPath2View;
 import com.dream.demo.view.CustomPath3View;
@@ -50,6 +52,8 @@ public class Title {
     public static TitleEntity title_c_001_004_012 = new TitleEntity("Android UDP广播发送和接收服务", R.layout.activity_udp, com.dream.demo.tcpservice.MainActivity.class);
     public static TitleEntity title_c_001_004_013 = new TitleEntity("Android UDP广播发送和接收服务2", R.layout.activity_udp, com.dream.demo.testtcpservice.MainActivity.class);
     public static TitleEntity title_c_001_004_014 = new TitleEntity("UDP搜索", R.layout.activity_udp_search, UdpSearchActivity.class);
+    public static TitleEntity title_c_001_004_015 = new TitleEntity("UDP和TCP服务端", R.layout.activity_udp_tcp_server, UdpTcpServerActivity.class);
+    public static TitleEntity title_c_001_004_016 = new TitleEntity("UDP和TCP客户端", R.layout.activity_udp_tcp_client, UdpTcpClientActivity.class);
 
     public static TitleEntity title_d_001_002_001_001 = new TitleEntity("圆形", R.layout.view_custom_circle, MainActivity.class);
     public static TitleEntity title_d_001_002_001_002 = new TitleEntity("距形", R.layout.view_custom_rect, MainActivity.class);

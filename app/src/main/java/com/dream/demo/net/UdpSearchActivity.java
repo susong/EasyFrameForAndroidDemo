@@ -53,7 +53,7 @@ public class UdpSearchActivity extends BaseActivity {
                 break;
             case R.id.btn_client_start:
                 if (mUDPSearchBroadcastClient == null) {
-                    mUDPSearchBroadcastClient = new UDPSearchBroadcastClient.Builder().context(this).build();
+                    mUDPSearchBroadcastClient = new UDPSearchBroadcastClient.Builder().build(this);
                 }
                 mUDPSearchBroadcastClient.search();
                 break;
